@@ -88,7 +88,7 @@ while (k < steps):
             next_dict[item] = True
 
     string = ""
-    for j in range(y_size-1, 0, -1):
+    for j in range(y_size-1, -1, -1):
         #string += str(y_size*j)
         for i in range(0, x_size):
             if dict_of_items[i + j*y_size].life:
@@ -96,7 +96,7 @@ while (k < steps):
             else:
                 string += "  "
         string += "\n"
-    sys.stdout.write("\r"+string)
+    print string
     time.sleep(0.05)
     clear = lambda: os.system('clear')
     clear()
