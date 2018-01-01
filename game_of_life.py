@@ -1,6 +1,5 @@
 # copyright siavoosh payandeh azad 2017
-# this is game of life with a glider as initial state
-# if your system is not mac you need to change line 101 (clear command) accordingly
+# if your system is not mac you need to change line containing clear = lambda: os.system('clear') accordingly
 
 __author__ = 'siavoosh'
 
@@ -26,7 +25,7 @@ class Item():
         return self.x, self.y
 
 x_size = 20
-y_size = 20
+y_size = 30
 steps = 100
 
 dict_of_items = {}
@@ -34,17 +33,29 @@ dict_of_items = {}
 # generating the items
 for i in range(0, x_size):
     for j in range(0, y_size):
-        dict_of_items[i + j * y_size] = Item(i, j, False)
+        dict_of_items[i + j * x_size] = Item(i, j, False)
+
 
 
 # initializing the system
 
+# glider
+"""
 dict_of_items[397].life = True
 dict_of_items[377].life = True
 dict_of_items[357].life = True
 dict_of_items[358].life = True
 dict_of_items[379].life = True
+"""
 
+# exploder
+dict_of_items[290].life = True
+dict_of_items[291].life = True
+dict_of_items[292].life = True
+dict_of_items[311].life = True
+dict_of_items[270].life = True
+dict_of_items[272].life = True
+dict_of_items[251].life = True
 
 # running it
 k = 0
@@ -54,23 +65,23 @@ while (k < steps):
         x, y = dict_of_items[item].report_coordinate()
         locations = []
         if x != x_size -1 :
-            locations.append(x + 1 + y_size * y)
+            locations.append(x + 1 + x_size * y)
             if y != y_size - 1:
-                locations.append(x + 1 + y_size * (y + 1))
+                locations.append(x + 1 + x_size * (y + 1))
             if y != 0:
-                locations.append(x + 1 + y_size * (y - 1))
+                locations.append(x + 1 + x_size * (y - 1))
 
         if x != 0:
-            locations.append((x - 1) + y_size * y)
+            locations.append((x - 1) + x_size * y)
             if y != y_size - 1:
-                locations.append(x - 1 + y_size * (y + 1))
+                locations.append(x - 1 + x_size * (y + 1))
             if y != 0:
-                locations.append(x - 1 + y_size * (y - 1))
+                locations.append(x - 1 + x_size * (y - 1))
 
         if y != y_size - 1:
-            locations.append(x + y_size * (y + 1))
+            locations.append(x + x_size * (y + 1))
         if y != 0:
-            locations.append(x + y_size * (y - 1))
+            locations.append(x + x_size * (y - 1))
 
         alive_around = 0
         for loc in locations:
@@ -91,13 +102,13 @@ while (k < steps):
     for j in range(y_size-1, -1, -1):
         #string += str(y_size*j)
         for i in range(0, x_size):
-            if dict_of_items[i + j*y_size].life:
-                string += "* "
+            if dict_of_items[i + j*x_size].life:
+                string += "*"
             else:
-                string += "  "
+                string += " "
         string += "\n"
     print string
-    time.sleep(0.05)
+    time.sleep(0.1)
     clear = lambda: os.system('clear')
     clear()
 
