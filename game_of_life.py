@@ -4,7 +4,7 @@
 __author__ = 'siavoosh'
 
 import time
-import os
+import curses
 
 
 class Item():
@@ -58,6 +58,10 @@ dict_of_items[272].life = True
 dict_of_items[251].life = True
 
 # running it
+stdscr = curses.initscr()
+curses.noecho()
+curses.cbreak()
+
 k = 0
 while (k < steps):
     next_dict = {}
@@ -103,16 +107,19 @@ while (k < steps):
         #string += str(y_size*j)
         for i in range(0, x_size):
             if dict_of_items[i + j*x_size].life:
-                string += "*"
+                stdscr.addstr(i, j, "*")
             else:
-                string += " "
+                stdscr.addstr(i, j, " ")
         string += "\n"
-    print string
     time.sleep(0.1)
-    clear = lambda: os.system('clear')
-    clear()
-
+    stdscr.refresh()
+    
     for item in dict_of_items.keys():
         dict_of_items[item].update_life(next_dict[item])
     k += 1
     next_dict = {}
+
+
+curses.echo()
+curses.nocbreak()
+curses.endwin()
