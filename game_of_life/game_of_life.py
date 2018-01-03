@@ -45,7 +45,23 @@ dict_of_items[358].life = True
 dict_of_items[379].life = True
 """
 
-# exploder
+
+# Exploder
+dict_of_items[309].life = True
+dict_of_items[311].life = True
+dict_of_items[313].life = True
+dict_of_items[289].life = True
+dict_of_items[293].life = True
+dict_of_items[269].life = True
+dict_of_items[273].life = True
+dict_of_items[249].life = True
+dict_of_items[253].life = True
+dict_of_items[229].life = True
+dict_of_items[231].life = True
+dict_of_items[233].life = True
+
+"""
+# small exploder
 dict_of_items[290].life = True
 dict_of_items[291].life = True
 dict_of_items[292].life = True
@@ -53,6 +69,7 @@ dict_of_items[311].life = True
 dict_of_items[270].life = True
 dict_of_items[272].life = True
 dict_of_items[251].life = True
+"""
 
 # running it
 stdscr = curses.initscr()
@@ -104,11 +121,11 @@ while (k < steps):
         #string += str(y_size*j)
         for i in range(0, x_size):
             if dict_of_items[i + j*x_size].life:
-                stdscr.addstr(i, j, "*")
+                stdscr.addstr(j, i, "*")
             else:
-                stdscr.addstr(i, j, " ")
+                stdscr.addstr(j, i, " ")
         string += "\n"
-    time.sleep(0.1)
+    time.sleep(0.5)
     stdscr.refresh()
 
     for item in dict_of_items.keys():
