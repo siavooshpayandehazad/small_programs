@@ -21,13 +21,27 @@ architecture behavioral of game_of_life is
     begin
     if rst = '1' then
         current_state <= (others => '0');
-        current_state(290) <= '1';
-        current_state(291) <= '1';
-        current_state(292) <= '1';
+        -- EXPLODER
+        current_state(309) <= '1';
         current_state(311) <= '1';
-        current_state(270) <= '1';
-        current_state(272) <= '1';
-        current_state(251) <= '1';
+        current_state(313) <= '1';
+        current_state(289) <= '1';
+        current_state(293) <= '1';
+        current_state(269) <= '1';
+        current_state(273) <= '1';
+        current_state(249) <= '1';
+        current_state(253) <= '1';
+        current_state(229) <= '1';
+        current_state(231) <= '1';
+        current_state(233) <= '1';
+        -- SMALL EXPLODER
+        --current_state(290) <= '1';
+        --current_state(291) <= '1';
+        --current_state(292) <= '1';
+        --current_state(311) <= '1';
+        --current_state(270) <= '1';
+        --current_state(272) <= '1';
+        --current_state(251) <= '1';
 
     elsif clk'event and clk = '1' then
         current_state <= current_state_in;
