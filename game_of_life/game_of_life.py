@@ -1,7 +1,4 @@
 # copyright siavoosh payandeh azad 2017
-# if your system is not mac you need to change line containing clear = lambda: os.system('clear') accordingly
-
-__author__ = 'siavoosh'
 
 import time
 import curses
@@ -113,7 +110,7 @@ while (k < steps):
         string += "\n"
     time.sleep(0.1)
     stdscr.refresh()
-    
+
     for item in dict_of_items.keys():
         dict_of_items[item].update_life(next_dict[item])
     k += 1
