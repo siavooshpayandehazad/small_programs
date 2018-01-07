@@ -50,7 +50,7 @@ class missile():
 		self.y -= 1
 
 
-screen_x = 20
+screen_x = 30
 screen_y = 40
 invader_width = 10
 invader_length = 10
@@ -65,13 +65,15 @@ curses.cbreak()
 stdscr.keypad(1)
 
 injection_counter = 0
+injection_threshold = 50
+level = 1
 
 cannon = cannon(screen_x/2)
 score = 0
 kill_list = []
 while not lost:
 	stdscr.nodelay(1)
-	if injection_counter == 10:	
+	if injection_counter == injection_threshold:	
 		injection_point = random.randint(invader_width/2, screen_x-(invader_width/2))
 		new_invader = invader(injection_point, 1)
 		invaders_list.append(new_invader)
@@ -82,7 +84,7 @@ while not lost:
 			stdscr.addstr(j, i, " ")
 
 	for missile_i in missile_list:
-		stdscr.addstr(missile_i.y, missile_i.x, "*")
+		stdscr.addstr(missile_i.y, missile_i.x, "^")
 
 	for invader_i in invaders_list:
 		if invader_i not in kill_list:
@@ -129,7 +131,7 @@ while not lost:
 		if missile_i in missile_list:
 			missile_list.remove(missile_i)
 
-	stdscr.addstr(screen_y, 0, "-"*screen_x)
+	stdscr.addstr(screen_y, 0, "."+"-"*(screen_x-2)+".")
 
 	char = stdscr.getch()
 	if char == curses.KEY_LEFT:
@@ -142,20 +144,31 @@ while not lost:
 	elif char == ord('a'):
 		new_missile = missile(cannon.x+1, screen_y-3)
 		missile_list.append(new_missile)
-
-	stdscr.addstr(screen_y+3, 0, "score:"+str(score))
+ 
+	stdscr.addstr(screen_y+1, 0, "| score:  "+'%5s' %str(score)+"              |")
+	stdscr.addstr(screen_y+2, 0, "| level:  "+'%3s' %str(level)+"                |")
+	stdscr.addstr(screen_y+3, 0, "| kills to next level: "+'%5s' %str((2*level)*10-score) +" |")
+	stdscr.addstr(screen_y+4, 0, "-"*screen_x)
+	stdscr.addstr(screen_y+5, 0, "Game Controls:")
+	stdscr.addstr(screen_y+6, 0, "     * Fire: \"a\"")
+	stdscr.addstr(screen_y+7, 0, "     * Right and left: arrow keys")
 
 	time.sleep(0.1)
 	stdscr.refresh()
 
 	injection_counter += 1 
+	if score == (2*level)*10: 
+		injection_threshold -= 5
+		level +=1
 
 for i in range(0, screen_x):
 		for j in range(0, screen_y):
 			stdscr.addstr(j, i, " ")
 stdscr.refresh()
-stdscr.addstr(int(screen_y/2), int(screen_x/2)-5, "you lost!")
-stdscr.addstr(int(screen_y/2)+1, int(screen_x/2)-7, "your score:"+str(score))
+stdscr.addstr(int(screen_y/2)-1, int(screen_x/2)-10, "===================")
+stdscr.addstr(int(screen_y/2), int(screen_x/2)-10,   "=    YOU LOST!    =")
+stdscr.addstr(int(screen_y/2)+1, int(screen_x/2)-10, "= your score:"+'%3s' %str(score)+"  =")
+stdscr.addstr(int(screen_y/2)+2, int(screen_x/2)-10, "===================")
 stdscr.refresh()
 time.sleep(10)
 curses.echo()
