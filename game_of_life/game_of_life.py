@@ -2,6 +2,7 @@
 
 import time
 import curses
+from math import log10, ceil
 
 
 class Item():
@@ -47,18 +48,18 @@ dict_of_items[379].life = True
 
 
 # Exploder
-dict_of_items[309].life = True
-dict_of_items[311].life = True
-dict_of_items[313].life = True
-dict_of_items[289].life = True
-dict_of_items[293].life = True
-dict_of_items[269].life = True
-dict_of_items[273].life = True
-dict_of_items[249].life = True
-dict_of_items[253].life = True
-dict_of_items[229].life = True
-dict_of_items[231].life = True
-dict_of_items[233].life = True
+dict_of_items[308].life = True
+dict_of_items[310].life = True
+dict_of_items[312].life = True
+dict_of_items[288].life = True
+dict_of_items[292].life = True
+dict_of_items[268].life = True
+dict_of_items[272].life = True
+dict_of_items[248].life = True
+dict_of_items[252].life = True
+dict_of_items[228].life = True
+dict_of_items[230].life = True
+dict_of_items[232].life = True
 
 """
 # small exploder
@@ -116,15 +117,29 @@ while (k < steps):
         if (not dict_of_items[item].life) and alive_around == 3:
             next_dict[item] = True
 
+    number_of_digits = int(ceil(log10(x_size)))+1 
+    for i in range(1, number_of_digits):
+        stdscr.addstr(number_of_digits-i, 0,"      ")
+        for k in range(0, x_size):
+            if len(str(k)) >= i:
+                stdscr.addstr(number_of_digits-i, k+6, str(k)[len(str(k))-i])
+            else:
+                stdscr.addstr(number_of_digits-i, k+6, "0")
+
+
+    stdscr.addstr(number_of_digits, 0, "     |"+"-"*x_size+"|")
     string = ""
     for j in range(y_size-1, -1, -1):
         #string += str(y_size*j)
+        stdscr.addstr(j+1+number_of_digits, 0, '%5s' % j + "|")
         for i in range(0, x_size):
             if dict_of_items[i + j*x_size].life:
-                stdscr.addstr(j, i, "*")
+                stdscr.addstr(j+1+number_of_digits, i+6, "*")
             else:
-                stdscr.addstr(j, i, " ")
+                stdscr.addstr(j+1+number_of_digits, i+6, " ")
         string += "\n"
+        stdscr.addstr(j+1+number_of_digits, x_size+6, "|")
+    stdscr.addstr(y_size+number_of_digits, 0, "     |"+"-"*x_size+"|")
     time.sleep(0.5)
     stdscr.refresh()
 
