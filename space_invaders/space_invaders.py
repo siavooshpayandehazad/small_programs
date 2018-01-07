@@ -1,3 +1,5 @@
+# copyright siavoosh payandeh azad 2017
+
 import random
 import time
 import curses
