@@ -79,6 +79,9 @@ while not (lost or end):
 		new_invader = invader(injection_point, 1)
 		invaders_list.append(new_invader)
 		injection_counter = 0
+		if len(invaders_list) == 0:
+			print "no inveder left!"
+			end = 1
 
 	for i in range(0, screen_x):
 		for j in range(0, screen_y):
@@ -171,8 +174,8 @@ while not (lost or end):
 
 	injection_counter += 1 
 	if score == (2*level)*10: 
-		if injection_threshold >10:
-			injection_threshold -= 5
+		if injection_threshold > 10:
+			injection_threshold -= 2
 		level +=1
 
 for i in range(0, screen_x):
