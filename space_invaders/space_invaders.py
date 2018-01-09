@@ -59,6 +59,7 @@ invaders_list = []
 missile_list = []
 lost = False
 end = False
+win = False
 
 stdscr = curses.initscr()
 curses.noecho()
@@ -72,7 +73,7 @@ level = 1
 cannon = cannon(screen_x/2)
 score = 0
 kill_list = []
-while not (lost or end):
+while not (lost or end or win):
 	stdscr.nodelay(1)
 	if injection_counter == injection_threshold:	
 		injection_point = random.randint(invader_width/2, screen_x-(invader_width/2))
@@ -80,8 +81,10 @@ while not (lost or end):
 		invaders_list.append(new_invader)
 		injection_counter = 0
 		if len(invaders_list) == 0:
-			print "no inveder left!"
-			end = 1
+			curses.echo()
+			curses.nocbreak()
+			curses.endwin()
+			raise ValueError("no inveder left!")
 
 	for i in range(0, screen_x):
 		for j in range(0, screen_y):
@@ -160,7 +163,7 @@ while not (lost or end):
 
 	stdscr.addstr(screen_y+1, 0, "| score:  "+'%5s' %str(score)+"              |")
 	stdscr.addstr(screen_y+2, 0, "| level:  "+'%5s' %str(level)+"              |")
-	stdscr.addstr(screen_y+3, 0, "| kills to next level: "+'%5s' %str((2*level)*10-score) +" |")
+	stdscr.addstr(screen_y+3, 0, "| kills to next level: "+'%5s' %str((20*level)-score) +" |")
 	stdscr.addstr(screen_y+4, 0, "-"*screen_x)
 	stdscr.addstr(screen_y+5, 0, "Game Controls:")
 	stdscr.addstr(screen_y+6, 0,  "  * Fire: \"a\"")
@@ -172,11 +175,14 @@ while not (lost or end):
 	time.sleep(0.1)
 	stdscr.refresh()
 
-	injection_counter += 1 
-	if score == (2*level)*10: 
+	
+	if score == 20*level: 
 		if injection_threshold > 10:
 			injection_threshold -= 2
+		else:
+			win = True
 		level +=1
+	injection_counter += 1 
 
 for i in range(0, screen_x):
 		for j in range(0, screen_y):
@@ -187,8 +193,10 @@ stdscr.addstr(int(screen_y/2)+1, int(screen_x/2)-10, "= your score:"+'%3s' %str(
 stdscr.addstr(int(screen_y/2)+2, int(screen_x/2)-10, "===================")
 if lost:
 	stdscr.addstr(int(screen_y/2), int(screen_x/2)-10,   "=    YOU LOST!    =")
-else:
+elif end:
 	stdscr.addstr(int(screen_y/2), int(screen_x/2)-10,   "=   GAME ENDED!   =")
+elif win:
+	stdscr.addstr(int(screen_y/2), int(screen_x/2)-10,   "=    YOU WON!   =")
 
 stdscr.refresh()
 time.sleep(5)
