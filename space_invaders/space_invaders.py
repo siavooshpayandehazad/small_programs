@@ -51,13 +51,14 @@ class missile():
 
 
 screen_x = 30
-screen_y = 40
+screen_y = 35
 invader_width = 10
 invader_length = 10
 
 invaders_list = []
 missile_list = []
 lost = False
+end = False
 
 stdscr = curses.initscr()
 curses.noecho()
@@ -71,7 +72,7 @@ level = 1
 cannon = cannon(screen_x/2)
 score = 0
 kill_list = []
-while not lost:
+while not (lost or end):
 	stdscr.nodelay(1)
 	if injection_counter == injection_threshold:	
 		injection_point = random.randint(invader_width/2, screen_x-(invader_width/2))
@@ -140,25 +141,38 @@ while not lost:
 	elif char == curses.KEY_RIGHT:
 		if cannon.x+4 < screen_x:
 			cannon.move_right()
-
+	elif char == ord('e'):
+		end = True
 	elif char == ord('a'):
 		new_missile = missile(cannon.x+1, screen_y-3)
 		missile_list.append(new_missile)
- 
+ 	
+ 	elif char == ord('p'):
+ 		char = " "
+ 		stdscr.addstr(int(screen_y/2)-1, int(screen_x/2)-10, "===================")
+		stdscr.addstr(int(screen_y/2), int(screen_x/2)-10,   "=    Paused!      =")		
+		stdscr.addstr(int(screen_y/2)+1, int(screen_x/2)-10, "===================")
+ 		while char != ord('p'):
+ 			char = stdscr.getch()
+
 	stdscr.addstr(screen_y+1, 0, "| score:  "+'%5s' %str(score)+"              |")
-	stdscr.addstr(screen_y+2, 0, "| level:  "+'%3s' %str(level)+"                |")
+	stdscr.addstr(screen_y+2, 0, "| level:  "+'%5s' %str(level)+"              |")
 	stdscr.addstr(screen_y+3, 0, "| kills to next level: "+'%5s' %str((2*level)*10-score) +" |")
 	stdscr.addstr(screen_y+4, 0, "-"*screen_x)
 	stdscr.addstr(screen_y+5, 0, "Game Controls:")
-	stdscr.addstr(screen_y+6, 0, "     * Fire: \"a\"")
-	stdscr.addstr(screen_y+7, 0, "     * Right and left: arrow keys")
-
+	stdscr.addstr(screen_y+6, 0,  "  * Fire: \"a\"")
+	stdscr.addstr(screen_y+7, 0,  "  * Move right: arrow keys ->")
+	stdscr.addstr(screen_y+8, 0,  "  * Move left:  arrow keys <-")
+	stdscr.addstr(screen_y+9, 0,  "  * Pause: \"p\"")
+	stdscr.addstr(screen_y+10, 0, "  * End game: \"e\"")
+	stdscr.addstr(screen_y+11, 0, "-"*screen_x)
 	time.sleep(0.1)
 	stdscr.refresh()
 
 	injection_counter += 1 
 	if score == (2*level)*10: 
-		injection_threshold -= 5
+		if injection_threshold >10:
+			injection_threshold -= 5
 		level +=1
 
 for i in range(0, screen_x):
@@ -166,11 +180,15 @@ for i in range(0, screen_x):
 			stdscr.addstr(j, i, " ")
 stdscr.refresh()
 stdscr.addstr(int(screen_y/2)-1, int(screen_x/2)-10, "===================")
-stdscr.addstr(int(screen_y/2), int(screen_x/2)-10,   "=    YOU LOST!    =")
 stdscr.addstr(int(screen_y/2)+1, int(screen_x/2)-10, "= your score:"+'%3s' %str(score)+"  =")
 stdscr.addstr(int(screen_y/2)+2, int(screen_x/2)-10, "===================")
+if lost:
+	stdscr.addstr(int(screen_y/2), int(screen_x/2)-10,   "=    YOU LOST!    =")
+else:
+	stdscr.addstr(int(screen_y/2), int(screen_x/2)-10,   "=   GAME ENDED!   =")
+
 stdscr.refresh()
-time.sleep(10)
+time.sleep(5)
 curses.echo()
 curses.nocbreak()
 curses.endwin()
